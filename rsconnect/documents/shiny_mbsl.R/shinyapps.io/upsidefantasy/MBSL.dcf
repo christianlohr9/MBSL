@@ -1,0 +1,12 @@
+name: MBSL
+title: MBSL
+username:
+account: upsidefantasy
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3587411
+bundleId: 4190239
+url: https://upsidefantasy.shinyapps.io/MBSL/
+when: 1612655985.14044
+asMultiple: FALSE
+asStatic: FALSE

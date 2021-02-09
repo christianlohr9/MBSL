@@ -1,0 +1,13 @@
+name: stats
+title: stats
+username:
+account: upsidefantasy
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2805565
+bundleId: 4166238
+url: https://upsidefantasy.shinyapps.io/stats/
+when: 1612169949.56094
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .httr-oauth|data/rec_actual.rds
