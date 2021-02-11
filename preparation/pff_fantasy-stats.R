@@ -48,7 +48,7 @@ all_fpts <- purrr::pmap_dfr(purrr::transpose(
 df = data.frame(lapply(all_fpts, as.character), stringsAsFactors=FALSE)
 
 sleeper_id <- nflfastR::fast_scraper_roster(2020) %>% 
-  select(pff_id,sleeper_id) %>% 
+  select(pff_id,sleeper_id, position) %>% 
   mutate_if(is.numeric, as.character)
 
 df_id <- df %>% 

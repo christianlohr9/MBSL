@@ -18,6 +18,7 @@
 
 library(shiny)
 library(shinyWidgets)
+library(shinyMobile)
 library(bslib)
 library(tidyverse)
 library(DT)
@@ -41,6 +42,7 @@ dark <- bs_theme(
 # Interner Link: Z:/GitHub/MBSL/
 players_fpts <- readRDS("data/players_shiny.rds") 
 players_fpts$GM <- as.factor(players_fpts$GM)
+players_fpts$position <- as.factor(players_fpts$position)
 players_fpts$Player <- as.factor(players_fpts$Player)
 players_fpts$extension <- as.factor(players_fpts$extension)
 players_fpts$Spot <- as.factor(players_fpts$Spot)
@@ -88,35 +90,44 @@ ui <- fluidPage(
     
   # Reiter für die Roster
   tabPanel("Roster",
-    fluidRow(column(4,
+    fluidRow(column(3,
             pickerInput("roster_gm",
                         label = "Choose a Team",
                         choices = levels(players_fpts$GM),
                         selected = levels(players_fpts$GM),
                         options = list(`actions-box` = TRUE,
-                                       `live-search` = TRUE),
+                                       `live-search` = TRUE,
+                                       `multiple-separator` = " | "),
                         multiple = T)),
-            column(4,
+            column(3,
             pickerInput("roster_roster",
                         label = "Choose a Spot",
                         choices = levels(players_fpts$Spot),
                         selected = levels(players_fpts$Spot),
                         options = list(`actions-box` = TRUE),
                         multiple = T)),
-            column(4,
+            column(3,
                    pickerInput("roster_player",
                                label = "Choose a Player",
                                choices = levels(players_fpts$Player),
                                selected = levels(players_fpts$Player),
                                options = list(`actions-box` = TRUE),
+                               multiple = T)),
+            column(3,
+                   pickerInput("roster_position",
+                               label = "Choose a Position",
+                               choices = levels(players_fpts$position),
+                               selected = levels(players_fpts$position),
+                               options = list(`actions-box` = TRUE,
+                                              `live-search` = TRUE),
                                multiple = T))
             ), 
   DT::dataTableOutput("Roster")
   ),
  
   # Reiter für die Vertragsverlängerung
-  tabPanel("Contract",
-           fluidRow(column(4,
+  tabPanel("Extensions",
+           fluidRow(column(3,
                            pickerInput("contract_gm",
                                        label = "Choose a Team",
                                        choices = levels(players_fpts$GM),
@@ -124,23 +135,31 @@ ui <- fluidPage(
                                        options = list(`actions-box` = TRUE,
                                                       `live-search` = TRUE),
                                        multiple = T)),
-                    column(4,
+                    column(3,
                            pickerInput("contract_roster",
                                        label = "Choose a Spot",
                                        choices = levels(players_fpts$Spot),
-                                       selected = levels(players_fpts$Spot),
+                                       selected = "Roster",
                                        options = list(`actions-box` = TRUE),
                                        multiple = T)),
-                    column(4,
+                    column(3,
                            pickerInput("contract_player",
                                        label = "Choose a Player",
                                        choices = levels(players_fpts$extension),
                                        selected = levels(players_fpts$extension),
                                        options = list(`actions-box` = TRUE,
                                                       `live-search` = TRUE),
+                                       multiple = T)),
+                    column(3,
+                           pickerInput("contract_position",
+                                       label = "Choose a Position",
+                                       choices = levels(players_fpts$position),
+                                       selected = levels(players_fpts$position),
+                                       options = list(`actions-box` = TRUE,
+                                                      `live-search` = TRUE),
                                        multiple = T))
            ), 
-           DT::dataTableOutput("Contract")
+           DT::dataTableOutput("Extensions")
   ), 
     # Text-Beispiel Fuer Christian:
   tabPanel("FAQ - WIP", 
@@ -252,7 +271,9 @@ server <- function(input, output, session) {
     DT::datatable(
       players_fpts %>%
         filter(
+          !(is.na(base_2021)) &
           GM %in% input$roster_gm &
+            position %in% input$roster_position &
             Spot %in% input$roster_roster &
             Player %in% input$roster_player
         ) %>%
@@ -290,12 +311,13 @@ server <- function(input, output, session) {
   })
 
   ##### Contract Table per GM
-  output$Contract <- DT::renderDataTable({
+  output$Extensions <- DT::renderDataTable({
     DT::datatable(
       players_fpts %>%
         filter(
           !(is.na(extension)) &
           GM %in% input$contract_gm &
+            position %in% input$contract_position &
             Spot %in% input$contract_roster &
             Player %in% input$contract_player
         ) %>%
