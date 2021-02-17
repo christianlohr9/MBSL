@@ -111,7 +111,9 @@ ui <- fluidPage(
                                label = "Choose a Player",
                                choices = levels(players_fpts$Player),
                                selected = levels(players_fpts$Player),
-                               options = list(`actions-box` = TRUE),
+                               options = list(`actions-box` = TRUE,
+                                              `live-search` = TRUE,
+                                              `multiple-separator` = " | "),
                                multiple = T)),
             column(3,
                    pickerInput("roster_position",
@@ -161,6 +163,185 @@ ui <- fluidPage(
            ), 
            DT::dataTableOutput("Extensions")
   ), 
+  
+### Reiter für die Vertragsverlängerung - Spielerauswahl
+  tabPanel("Extensions2",
+           fluidRow(column(3,
+                           pickerInput("extension_player_1",
+                                       label = "Choose a Player",
+                                       choices = levels(players_fpts$extension),
+                                       selected = NULL,
+                                       multiple = TRUE,
+                                       options = list(`live-search` = TRUE,
+                                                      pickerOptions(maxOptions = 1))
+                                       )),
+                    column(3,
+                           numericInput("extension_length_1",
+                                       label = "Choose a Contract Length",
+                                       min = 1,
+                                       max = 5,
+                                       step = 1,
+                                       value = 1
+                                       )),
+                    column(1,
+                           numericInput("extension_year1_1",
+                                       label = "Year 1 Load",
+                                       min = 0,
+                                       max = 100,
+                                       step = 5,
+                                       value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year2_1",
+                                        label = "Year 2 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year3_1",
+                                        label = "Year 3 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year4_1",
+                                        label = "Year 4 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year5_1",
+                                        label = "Year 5 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           ))
+           ),
+           fluidRow(column(3,
+                           pickerInput("extension_player_2",
+                                       label = "Choose a Player",
+                                       choices = levels(players_fpts$extension),
+                                       selected = NULL,
+                                       multiple = TRUE,
+                                       options = list(`live-search` = TRUE,
+                                                      pickerOptions(maxOptions = 1))
+                           )),
+                    column(3,
+                           numericInput("extension_length_2",
+                                       label = "Choose a Contract Length",
+                                       min = 1,
+                                       max = 5,
+                                       step = 1,
+                                       value = 1
+                           )),
+                    column(1,
+                           numericInput("extension_year1_2",
+                                        label = "Year 1 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year2_2",
+                                        label = "Year 2 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year3_2",
+                                        label = "Year 3 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year4_2",
+                                        label = "Year 4 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year5_2",
+                                        label = "Year 5 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           ))
+           ),
+           fluidRow(column(3,
+                           pickerInput("extension_player_3",
+                                       label = "Choose a Player",
+                                       choices = levels(players_fpts$extension),
+                                       selected = NULL,
+                                       multiple = TRUE,
+                                       options = list(`live-search` = TRUE,
+                                                      pickerOptions(maxOptions = 1))
+                           )),
+                    column(3,
+                           numericInput("extension_length_3",
+                                       label = "Choose a Contract Length",
+                                       min = 1,
+                                       max = 5,
+                                       step = 1,
+                                       value = 1
+                           )),
+                    column(1,
+                           numericInput("extension_year1_3",
+                                        label = "Year 1 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year2_3",
+                                        label = "Year 2 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year3_3",
+                                        label = "Year 3 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year4_3",
+                                        label = "Year 4 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           )),
+                    column(1,
+                           numericInput("extension_year5_3",
+                                        label = "Year 5 Load",
+                                        min = 0,
+                                        max = 100,
+                                        step = 5,
+                                        value = 20
+                           ))
+           ),
+           DT::dataTableOutput("Extensions2")
+  ),
     # Text-Beispiel Fuer Christian:
   tabPanel("FAQ - WIP", 
            fluidRow(column(width=12,
@@ -345,7 +526,139 @@ server <- function(input, output, session) {
     ) %>% 
       formatRound(columns = c(3:5), digits = 2)
   })  
+
+  ##### Contract Table per Player
   
+  
+  
+  output$Extensions2 <- DT::renderDataTable({
+    DT::datatable(bind_rows(
+      players_fpts %>%
+        filter(
+          Player %in% c(input$extension_player_1,input$extension_player_2,input$extension_player_3)
+        ) %>%
+        select(Player,
+               base_2021,
+               guarantee_2021,
+               base_2022,
+               guarantee_2022,
+               base_2023,
+               guarantee_2023,
+               base_2024,
+               guarantee_2024,
+               contract) %>%
+        mutate(base_2025 = NA_real_,
+               guarantee_2025 = NA_real_,
+               contract_value = sum(
+          base_2021,
+          guarantee_2021,
+          base_2022,
+          guarantee_2022,
+          base_2023,
+          guarantee_2023,
+          base_2024,
+          guarantee_2024
+        , na.rm = T),
+        contract_value_year = contract_value/contract) %>% 
+        select(-contract),
+      ### output player 1 with extension length
+      players_fpts %>%
+        filter(Player %in% c(input$extension_player_1)) %>%
+        mutate(guarantee = case_when(input$extension_length_1 == 1 ~ extension_value*0.3,
+                                     input$extension_length_1 == 2 ~ extension_value*0.4,
+                                     input$extension_length_1 == 3 ~ extension_value*0.5,
+                                     input$extension_length_1 == 4 ~ extension_value*0.6,
+                                     input$extension_length_1 == 5 ~ extension_value*0.7,
+                                     T ~ 0) * input$extension_length_1,
+               base_2021_new = extension_value,
+               guarantee_2021_new = guarantee*(input$extension_year1_1/100),
+               base_2022_new = case_when(input$extension_length_1==1 ~ 0,
+                                         T ~ extension_value),
+               guarantee_2022_new = case_when(input$extension_length_1==1 ~ 0,
+                                              T ~ guarantee*(input$extension_year2_1/100)),
+               base_2023_new = case_when(input$extension_length_1 %in% c(1,2) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2023_new = case_when(input$extension_length_1 %in% c(1,2) ~ 0,
+                                              T ~ guarantee*(input$extension_year3_1/100)),
+               base_2024_new = case_when(input$extension_length_1 %in% c(1,2,3) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2024_new = case_when(input$extension_length_1 %in% c(1,2,3) ~ 0,
+                                              T ~ guarantee*(input$extension_year4_1/100)),
+               base_2025_new = case_when(input$extension_length_1 %in% c(1,2,3,4) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2025_new = case_when(input$extension_length_1 %in% c(1,2,3,4) ~ 0,
+                                              T ~ guarantee*(input$extension_year5_1/100)),
+               contract_value = sum(
+                 base_2021_new,
+                 guarantee_2021_new,
+                 base_2022_new,
+                 guarantee_2022_new,
+                 base_2023_new,
+                 guarantee_2023_new,
+                 base_2024_new,
+                 guarantee_2024_new,
+                 base_2025_new,
+                 guarantee_2025_new),
+               contract_value_year = contract_value / input$extension_length_1) %>% 
+        group_by(Player) %>% 
+        summarise(
+          base_2021 = sum(base_2021_new, na.rm = T),
+          guarantee_2021 = sum(guarantee_2021_new, na.rm = T),
+          base_2022 = sum(base_2022_new, na.rm = T),
+          guarantee_2022 = sum(guarantee_2022_new, na.rm = T),
+          base_2023 = sum(base_2023_new, na.rm = T),
+          guarantee_2023 = sum(guarantee_2023_new, na.rm = T),
+          base_2024 = sum(base_2024_new, na.rm = T),
+          guarantee_2024 = sum(guarantee_2024_new, na.rm = T),
+          base_2025 = sum(base_2025_new, na.rm = T),
+          guarantee_2025 = sum(guarantee_2025_new, na.rm = T),
+          contract_value,
+          contract_value_year
+        )
+    ) %>% 
+      mutate(guarantee_sum = rowSums(data.frame(
+        guarantee_2021,
+        guarantee_2022,
+        guarantee_2023,
+        guarantee_2024,
+        guarantee_2025),
+        na.rm = T
+      ),
+      guarantee_max = max(guarantee_sum),
+      guarantee_na = rowSums(is.na(data.frame(
+        guarantee_2021,
+        guarantee_2022,
+        guarantee_2023,
+        guarantee_2024,
+        guarantee_2025))),
+      guarantee_na_max = max(guarantee_na),
+      guarantee_remaining= case_when((guarantee_max-guarantee_sum)<=0 ~ 0,
+                                     (guarantee_na_max-guarantee_na)==0 ~ 0,
+                                          T ~ guarantee_max-guarantee_sum)) %>% 
+      select(-guarantee_sum,-guarantee_max,-guarantee_na,-guarantee_na_max),
+      colnames = c(
+        "ID",
+        "Player",
+        "Base_21",
+        "Garantie_21",
+        "Base_22",
+        "Garantie_22",
+        "Base_23",
+        "Garantie_23",
+        "Base_24",
+        "Garantie_24",
+        "Base_25",
+        "Garantie_25",
+        "Vertragswert",
+        "Vertragswert pro Jahr",
+        "Zusätzliche Garantien"
+      ),
+      options = list(pageLength = 20),
+      filter = "top",
+      style = "bootstrap"
+    ) %>% 
+      formatRound(columns = c(2:13), digits = 2)
+  })   
 
 }
 
