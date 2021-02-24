@@ -5,8 +5,9 @@ account: upsidefantasy
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3587411
-bundleId: 4190239
+bundleId: 4240783
 url: https://upsidefantasy.shinyapps.io/MBSL/
-when: 1612655985.14044
+when: 1613653867.15213
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: shiny_mbsl_mobile-temp.R|preparation/data_mbsl.R|preparation/fpts18-20.csv|preparation/MBSL Datenbank.csv|preparation/pff_fantasy-stats.R|preparation/Vertragszuordnung.csv

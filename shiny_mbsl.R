@@ -18,7 +18,7 @@
 
 library(shiny)
 library(shinyWidgets)
-library(shinyMobile)
+#library(shinyMobile)
 library(bslib)
 library(tidyverse)
 library(DT)
@@ -166,6 +166,9 @@ ui <- fluidPage(
   
 ### Reiter für die Vertragsverlängerung - Spielerauswahl
   tabPanel("Extensions2",
+           fluidRow(column(12,
+                           strong("Vorsicht: In den Eingabefeldern zur 'Load' erfolgt keine Prufung auf 100%."),
+                           br())),
            fluidRow(column(3,
                            pickerInput("extension_player_1",
                                        label = "Choose a Player",
@@ -535,7 +538,8 @@ server <- function(input, output, session) {
     DT::datatable(bind_rows(
       players_fpts %>%
         filter(
-          Player %in% c(input$extension_player_1,input$extension_player_2,input$extension_player_3)
+          Player %in% c(input$extension_player_1,input$extension_player_2,input$extension_player_3) &
+            Spot!="Off-Roster"
         ) %>%
         select(Player,
                base_2021,
@@ -549,21 +553,22 @@ server <- function(input, output, session) {
                contract) %>%
         mutate(base_2025 = NA_real_,
                guarantee_2025 = NA_real_,
-               contract_value = sum(
-          base_2021,
-          guarantee_2021,
-          base_2022,
-          guarantee_2022,
-          base_2023,
-          guarantee_2023,
-          base_2024,
-          guarantee_2024
-        , na.rm = T),
+               contract_value = rowSums(data.frame(
+                 base_2021,
+                 guarantee_2021,
+                 base_2022,
+                 guarantee_2022,
+                 base_2023,
+                 guarantee_2023,
+                 base_2024,
+                 guarantee_2024)
+                 , na.rm = T),
         contract_value_year = contract_value/contract) %>% 
         select(-contract),
       ### output player 1 with extension length
       players_fpts %>%
-        filter(Player %in% c(input$extension_player_1)) %>%
+        filter(Player %in% c(input$extension_player_1)&
+                 Spot!="Off-Roster") %>%
         mutate(guarantee = case_when(input$extension_length_1 == 1 ~ extension_value*0.3,
                                      input$extension_length_1 == 2 ~ extension_value*0.4,
                                      input$extension_length_1 == 3 ~ extension_value*0.5,
@@ -614,7 +619,117 @@ server <- function(input, output, session) {
           guarantee_2025 = sum(guarantee_2025_new, na.rm = T),
           contract_value,
           contract_value_year
-        )
+        ),
+      ### output player 2 with extension length
+      players_fpts %>%
+        filter(Player %in% c(input$extension_player_2)&
+                 Spot!="Off-Roster") %>%
+        mutate(guarantee = case_when(input$extension_length_2 == 1 ~ extension_value*0.3,
+                                     input$extension_length_2 == 2 ~ extension_value*0.4,
+                                     input$extension_length_2 == 3 ~ extension_value*0.5,
+                                     input$extension_length_2 == 4 ~ extension_value*0.6,
+                                     input$extension_length_2 == 5 ~ extension_value*0.7,
+                                     T ~ 0) * input$extension_length_2,
+               base_2021_new = extension_value,
+               guarantee_2021_new = guarantee*(input$extension_year1_2/100),
+               base_2022_new = case_when(input$extension_length_2==1 ~ 0,
+                                         T ~ extension_value),
+               guarantee_2022_new = case_when(input$extension_length_2==1 ~ 0,
+                                              T ~ guarantee*(input$extension_year2_2/100)),
+               base_2023_new = case_when(input$extension_length_2 %in% c(1,2) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2023_new = case_when(input$extension_length_2 %in% c(1,2) ~ 0,
+                                              T ~ guarantee*(input$extension_year3_2/100)),
+               base_2024_new = case_when(input$extension_length_2 %in% c(1,2,3) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2024_new = case_when(input$extension_length_2 %in% c(1,2,3) ~ 0,
+                                              T ~ guarantee*(input$extension_year4_2/100)),
+               base_2025_new = case_when(input$extension_length_2 %in% c(1,2,3,4) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2025_new = case_when(input$extension_length_2 %in% c(1,2,3,4) ~ 0,
+                                              T ~ guarantee*(input$extension_year5_2/100)),
+               contract_value = sum(
+                 base_2021_new,
+                 guarantee_2021_new,
+                 base_2022_new,
+                 guarantee_2022_new,
+                 base_2023_new,
+                 guarantee_2023_new,
+                 base_2024_new,
+                 guarantee_2024_new,
+                 base_2025_new,
+                 guarantee_2025_new),
+               contract_value_year = contract_value / input$extension_length_2) %>% 
+        group_by(Player) %>% 
+        summarise(
+          base_2021 = sum(base_2021_new, na.rm = T),
+          guarantee_2021 = sum(guarantee_2021_new, na.rm = T),
+          base_2022 = sum(base_2022_new, na.rm = T),
+          guarantee_2022 = sum(guarantee_2022_new, na.rm = T),
+          base_2023 = sum(base_2023_new, na.rm = T),
+          guarantee_2023 = sum(guarantee_2023_new, na.rm = T),
+          base_2024 = sum(base_2024_new, na.rm = T),
+          guarantee_2024 = sum(guarantee_2024_new, na.rm = T),
+          base_2025 = sum(base_2025_new, na.rm = T),
+          guarantee_2025 = sum(guarantee_2025_new, na.rm = T),
+          contract_value,
+          contract_value_year
+        ),
+      ### output player 3 with extension length
+      players_fpts %>%
+        filter(Player %in% c(input$extension_player_3)&
+                 Spot!="Off-Roster") %>%
+        mutate(guarantee = case_when(input$extension_length_3 == 1 ~ extension_value*0.3,
+                                     input$extension_length_3 == 2 ~ extension_value*0.4,
+                                     input$extension_length_3 == 3 ~ extension_value*0.5,
+                                     input$extension_length_3 == 4 ~ extension_value*0.6,
+                                     input$extension_length_3 == 5 ~ extension_value*0.7,
+                                     T ~ 0) * input$extension_length_3,
+               base_2021_new = extension_value,
+               guarantee_2021_new = guarantee*(input$extension_year1_3/100),
+               base_2022_new = case_when(input$extension_length_3==1 ~ 0,
+                                         T ~ extension_value),
+               guarantee_2022_new = case_when(input$extension_length_3==1 ~ 0,
+                                              T ~ guarantee*(input$extension_year2_3/100)),
+               base_2023_new = case_when(input$extension_length_3 %in% c(1,2) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2023_new = case_when(input$extension_length_3 %in% c(1,2) ~ 0,
+                                              T ~ guarantee*(input$extension_year3_3/100)),
+               base_2024_new = case_when(input$extension_length_3 %in% c(1,2,3) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2024_new = case_when(input$extension_length_3 %in% c(1,2,3) ~ 0,
+                                              T ~ guarantee*(input$extension_year4_3/100)),
+               base_2025_new = case_when(input$extension_length_3 %in% c(1,2,3,4) ~ 0,
+                                         T ~ extension_value),
+               guarantee_2025_new = case_when(input$extension_length_3 %in% c(1,2,3,4) ~ 0,
+                                              T ~ guarantee*(input$extension_year5_3/100)),
+               contract_value = sum(
+                 base_2021_new,
+                 guarantee_2021_new,
+                 base_2022_new,
+                 guarantee_2022_new,
+                 base_2023_new,
+                 guarantee_2023_new,
+                 base_2024_new,
+                 guarantee_2024_new,
+                 base_2025_new,
+                 guarantee_2025_new),
+               contract_value_year = contract_value / input$extension_length_3) %>% 
+        group_by(Player) %>% 
+        summarise(
+          base_2021 = sum(base_2021_new, na.rm = T),
+          guarantee_2021 = sum(guarantee_2021_new, na.rm = T),
+          base_2022 = sum(base_2022_new, na.rm = T),
+          guarantee_2022 = sum(guarantee_2022_new, na.rm = T),
+          base_2023 = sum(base_2023_new, na.rm = T),
+          guarantee_2023 = sum(guarantee_2023_new, na.rm = T),
+          base_2024 = sum(base_2024_new, na.rm = T),
+          guarantee_2024 = sum(guarantee_2024_new, na.rm = T),
+          base_2025 = sum(base_2025_new, na.rm = T),
+          guarantee_2025 = sum(guarantee_2025_new, na.rm = T),
+          contract_value,
+          contract_value_year
+        ),
     ) %>% 
       mutate(guarantee_sum = rowSums(data.frame(
         guarantee_2021,
@@ -624,18 +739,23 @@ server <- function(input, output, session) {
         guarantee_2025),
         na.rm = T
       ),
-      guarantee_max = max(guarantee_sum),
       guarantee_na = rowSums(is.na(data.frame(
         guarantee_2021,
         guarantee_2022,
         guarantee_2023,
         guarantee_2024,
         guarantee_2025))),
-      guarantee_na_max = max(guarantee_na),
-      guarantee_remaining= case_when((guarantee_max-guarantee_sum)<=0 ~ 0,
-                                     (guarantee_na_max-guarantee_na)==0 ~ 0,
-                                          T ~ guarantee_max-guarantee_sum)) %>% 
-      select(-guarantee_sum,-guarantee_max,-guarantee_na,-guarantee_na_max),
+      ) %>%
+      group_by(Player) %>% 
+      mutate(guarantee_max = max(guarantee_sum),
+             guarantee_na_max = max(guarantee_na)
+      ) %>% 
+      ungroup() %>% 
+      mutate(guarantee_remaining= case_when((guarantee_max-guarantee_sum)<=0 ~ 0,
+                                            (guarantee_na_max-guarantee_na)==0 ~ 0,
+                                            T ~ guarantee_max-guarantee_sum)) %>% 
+      select(-guarantee_sum,-guarantee_max,-guarantee_na,-guarantee_na_max) %>% 
+      arrange(Player),
       colnames = c(
         "ID",
         "Player",
@@ -651,13 +771,13 @@ server <- function(input, output, session) {
         "Garantie_25",
         "Vertragswert",
         "Vertragswert pro Jahr",
-        "Zusätzliche Garantien"
+        "Zusatzliche Garantien"
       ),
       options = list(pageLength = 20),
       filter = "top",
       style = "bootstrap"
     ) %>% 
-      formatRound(columns = c(2:13), digits = 2)
+      formatRound(columns = c(2:14), digits = 2)
   })   
 
 }
