@@ -40,7 +40,7 @@ dark <- bs_theme(
 ###################################
 # Load Data: 
 # Interner Link: Z:/GitHub/MBSL/
-players_fpts <- readRDS("data/players_shiny.rds") 
+players_fpts <- readRDS("Z:/GitHub/MBSL/data/players_shiny.rds") 
 players_fpts$GM <- as.factor(players_fpts$GM)
 players_fpts$position <- as.factor(players_fpts$position)
 players_fpts$Player <- as.factor(players_fpts$Player)

@@ -1,10 +1,10 @@
-library(tiyverse)
+library(tidyverse)
 
 Sys.setenv(http_proxy = "172.30.15.242:8080")
 Sys.setenv(https_proxy = "172.30.7.242:8080")
 
 position <- c("passing","receiving")
-season <- 2018:2020
+season <- 2019:2021
 
 get_fpts <- function(position,season) {
 raw <- httr::GET(paste0(
@@ -14,22 +14,13 @@ raw <- httr::GET(paste0(
   season,
   "&weeks=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16&scoring=139038"),
   httr::set_cookies(
-    "__cfduid"="d254bdc173ac48cbf9b265f8bc689ccea1612280085",
-    "mailmunch_second_pageview"="true",
-    "_mailmunch_visitor_id"="60a87cce-f757-4045-8ab7-d50ed3b1feef",
-    "_gcl_au"="1.1.1467758914.1612280088",
-    "_gid"="GA1.2.1385330789.1612648710",
-    "seerses"="e",
-    "_fbp"="fb.1.1612280088919.1025354076",
-    "seerid"="u_841648512495216600",
-    "_ga_8Y6RN784SW"="GS1.1.1612648710.8.1.1612649437.56",
-    "_ga"="GA1.2.1078851802.1612280089",
-    "_merlin_key"="SFMyNTY.g3QAAAADbQAAAAtfY3NyZl90b2tlbm0AAAAYYWxGbUU2WnRBZ2tibEstNG4xRFZWSVFBbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAmRleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUpOWlhKc2FXNGlMQ0psZUhBaU9qRTJNVEkyTlRJek1Ea3NJbWxoZENJNk1UWXhNalkwT0Rjd09Td2lhWE56SWpvaVRXVnliR2x1SWl3aWFuUnBJam9pT0dJd1pqVXhOelV0WldKbE1DMDBaV05qTFdFNE56SXRZelF6TkdZMllXSTJNVFV4SWl3aWJtSm1Jam94TmpFeU5qUTROekE0TENKd1pXMGlPbnNpWTI5c2JHVm5aU0k2TVN3aVpXeHBkR1VpT2pGOUxDSnpkV0lpT2lKN1hDSmxiV0ZwYkZ3aU9sd2labXh2TG1KcFpXeHRaV2xsY2tCbmJXRnBiQzVqYjIxY0lpeGNJbVpsWVhSMWNtVnpYQ0k2VzEwc1hDSm1hWEp6ZEY5dVlXMWxYQ0k2WENKR2JHOXlhV0Z1WENJc1hDSnNZWE4wWDI1aGJXVmNJanBjSWtKcFpXeHRaV2xsY2x3aUxGd2lkV2xrWENJNlhDSmlNbVk0TjJFMllpMHhZbVEzTFRRelpqWXRPVGM0TlMwMk1qSmhPR0ptT1RSaE5UVmNJaXhjSW5abGNuUnBZMkZzWENJNlhDSkRiMjV6ZFcxbGNsd2lmU0lzSW5SNWNDSTZJbUZqWTJWemN5SjkuUkZaY0dCenVIbmpzdFlVUkJCT3l1ejNsd2VsOUlUbnVKV0RybjBLZldQZTg5THg1WDdNdzItbVlEWlVlME9wREZhamVhUWpFNFJNSnBPZEVlbkc5SlFtAAAACXJldHVybl90b20AAAAOL2ZhbnRhc3kvc3RhdHM.K6ZW4tEOebWrmBfZep3YMOiduZPZXiIGrdTGhpUssvU",
-    "c_groot_access_token"="vL_gqHRn6aTyIjzEWbIhh5Az6yQSTY_New3v-8nITvWB-UMEfrkp5xneVpGbs3HB",
+    "_ga_8Y6RN784SW"="GS1.1.1644234063.2.0.1644234063.60",
+    "_merlin_key"="SFMyNTY.g3QAAAADbQAAAAtfY3NyZl90b2tlbm0AAAAYUzBCcnVzeGc2TUV2SlY4eUtKUk52c0dHbQAAABZndWFyZGlhbl9kZWZhdWx0X3Rva2VubQAAAlNleUpoYkdjaU9pSklVelV4TWlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKaGRXUWlPaUpOWlhKc2FXNGlMQ0psZUhBaU9qRTJORFF5TXpjMk5qRXNJbWxoZENJNk1UWTBOREl6TkRBMk1Td2lhWE56SWpvaVRXVnliR2x1SWl3aWFuUnBJam9pTlRjd016SmtZV1F0TlRVMk9TMDBNRGRtTFdJeVpEWXRNV0UzT1dZME5tUTNNRGMwSWl3aWJtSm1Jam94TmpRME1qTTBNRFl3TENKd1pXMGlPbnNpWTI5c2JHVm5aU0k2TVN3aVpXeHBkR1VpT2pGOUxDSnpkV0lpT2lKN1hDSmxiV0ZwYkZ3aU9sd2lZMnh2YUhJNVFHZHRlQzVrWlZ3aUxGd2labVZoZEhWeVpYTmNJanBiWFN4Y0ltWnBjbk4wWDI1aGJXVmNJanBjSWtOb2NtbHpkR2xoYmx3aUxGd2liR0Z6ZEY5dVlXMWxYQ0k2WENKTWIyaHlYQ0lzWENKMWFXUmNJanBjSW1SaFl6QXdNRGhpTFRVMk1tSXROR1l6TUMxaE1EUTJMV0k1TldRNU1XRmpNekV4Tmx3aUxGd2lkbVZ5ZEdsallXeGNJanBjSWtOdmJuTjFiV1Z5WENKOUlpd2lkSGx3SWpvaVlXTmpaWE56SW4wLlZWUDFoYTFCck1lVHNMYk12V2xCVWNZUVF1dDBWNTVzRlRweGd0amhydWhZbTFyVnlRSFpaUUU2MHJPajdtYUJaRjhNNWlTRDUtZUJWOXdra1ZQZ0R3bQAAAAlyZXR1cm5fdG9tAAAADi9mYW50YXN5L3N0YXRz.0FfOJB3ESVjdDJWb2Dlp7jaiVIAjPdz5LpoXcioN0wI",
+    "c_groot_access_token"="33RYFF8lMagKouJ2Yb7Dud6UlZdGAfqUmc3-rwrujbgctJgaSm4lMmlb3oCEp9LB",
     # "c_groot_access_ts"="2020-12-07T15:33:44Z",
-    "c_groot_refresh_token"="_K-3tkJD5zsmK5SlxrfyD2cJxLJEDsKJbtnwIiSOFT9mYVkpd_-lVXBz3e1Wk5jq",
-    "AWSALB"="+B0ue7gfdvVPu8LBqX25xM+vTa1UUPDuqUnPjw7XwSl8UclR2wjeUwmpvQbU8yiZbX3Ht6cpVY5xk9PdlHocT5vLT+5u/LS+awqIQyV180i0u/VQVznrNxeV0Zgj",
-    "AWSALBCORS"="+B0ue7gfdvVPu8LBqX25xM+vTa1UUPDuqUnPjw7XwSl8UclR2wjeUwmpvQbU8yiZbX3Ht6cpVY5xk9PdlHocT5vLT+5u/LS+awqIQyV180i0u/VQVznrNxeV0Zgj"
+    "c_groot_refresh_token"="nSed1Rw52oLPMWiV6T8Fyz3r16kAeeUUlwJDkEll5wHq0H1i6VTbKWOREtzvElIJ",
+    "AWSALB"="xbO+LD+mj5yXEbjMJEX9366LfFSQRj9JsETsxB8QLPjVgDYPm50siAnPGBkyCYslTAbb9YQrYP2y5p50FWvCchjypkgDKGTn3j7RkJgjIqexr34eS31L1LqPApsd",
+    "AWSALBCORS"="xbO+LD+mj5yXEbjMJEX9366LfFSQRj9JsETsxB8QLPjVgDYPm50siAnPGBkyCYslTAbb9YQrYP2y5p50FWvCchjypkgDKGTn3j7RkJgjIqexr34eS31L1LqPApsd"
   )
 )
 content <- httr::content(raw) %>%
@@ -47,11 +38,11 @@ all_fpts <- purrr::pmap_dfr(purrr::transpose(
 
 df = data.frame(lapply(all_fpts, as.character), stringsAsFactors=FALSE)
 
-sleeper_id <- nflfastR::fast_scraper_roster(2020) %>% 
+sleeper_id <- nflfastR::fast_scraper_roster(2021) %>% 
   select(pff_id,sleeper_id, position) %>% 
   mutate_if(is.numeric, as.character)
 
 df_id <- df %>% 
   left_join(sleeper_id, by = c("player_id"="pff_id"))
 
-write.csv2(df_id,"H:/GitHub/MBSL/preparation/fpts18-20.csv")
+write.csv2(df_id,"Z:/GitHub/MBSL/preparation/fpts19-21.csv")
